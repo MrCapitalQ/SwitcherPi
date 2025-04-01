@@ -1,5 +1,6 @@
 @SwitcherPi.Api_HostAddress = http://localhost:5010
 
-
+PUT {{SwitcherPi.Api_HostAddress}}/api/Devices?id=1
+Accept: application/json
 
 ###
