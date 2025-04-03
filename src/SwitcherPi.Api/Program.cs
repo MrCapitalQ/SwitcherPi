@@ -1,6 +1,6 @@
 using MrCapitalQ.SwitcherPi.Api;
 
-var builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateSlimBuilder(args);
 
 // Add services to the container.
 builder.Services.AddTransient<DeviceSelectorService>();
