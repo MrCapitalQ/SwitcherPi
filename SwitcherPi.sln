@@ -7,6 +7,24 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{02EA681E-C7D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SwitcherPi.Api", "src\SwitcherPi.Api\SwitcherPi.Api.csproj", "{83692ECA-8653-44D2-89E5-C28AA7151929}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8EC462FD-D22E-90A8-E5CE-7E832BA40C5D}"
+	ProjectSection(SolutionItems) = preProject
+		readme.md = readme.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "infra", "infra", "{18D42845-E7C1-448A-AEB4-C687E02C56B3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "linux", "linux", "{D17DEC6E-604D-478C-872D-3A3A04BED09C}"
+	ProjectSection(SolutionItems) = preProject
+		infra\linux\switcherpi.service = infra\linux\switcherpi.service
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "scripts", "scripts", "{A820184E-B34C-46BD-B1CA-0804075306B7}"
+	ProjectSection(SolutionItems) = preProject
+		scripts\deployRPi.ps1 = scripts\deployRPi.ps1
+		scripts\setup.ps1 = scripts\setup.ps1
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,6 +41,7 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{83692ECA-8653-44D2-89E5-C28AA7151929} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{D17DEC6E-604D-478C-872D-3A3A04BED09C} = {18D42845-E7C1-448A-AEB4-C687E02C56B3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {36E4B52D-0074-48F6-961A-AE64381723BD}

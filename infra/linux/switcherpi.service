@@ -1,0 +1,17 @@
+[Unit]
+Description=SwitcherPi .NET Web API App
+
+[Service]
+WorkingDirectory=/var/www/SwitcherPi
+ExecStart=/var/www/SwitcherPi/MrCapitalQ.SwitcherPi.Api
+Restart=always
+# Restart service after 5 seconds if the dotnet service crashes:
+RestartSec=5
+KillSignal=SIGINT
+SyslogIdentifier=SwitcherPi
+Environment=ASPNETCORE_ENVIRONMENT=Production
+Environment=ASPNETCORE_URLS=http://*:5010
+Environment=DOTNET_PRINT_TELEMETRY_MESSAGE=false
+
+[Install]
+WantedBy=multi-user.target
