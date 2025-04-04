@@ -17,9 +17,25 @@ internal class DeviceSelectorService(IOptions<DeviceScanCodeOptions> options, IL
             foreach (var scanCode in scanCodes)
             {
                 _logger.LogInformation("Sending scan code {ScanCode}", scanCode);
-                var process = Process.Start("ir-ctl", $"-S {scanCode}");
+                var process = new Process
+                {
+                    StartInfo = new()
+                    {
+                        FileName = "ir-ctl",
+                        Arguments = $"-S {scanCode}",
+                        RedirectStandardError = true,
+                        CreateNoWindow = true
+                    }
+                };
+                process.Start();
                 await process.WaitForExitAsync();
+
+                var error = await process.StandardError.ReadToEndAsync();
+                if (!string.IsNullOrEmpty(error))
+                    throw new DeviceSelectException(error);
             }
         }
     }
 }
+
+internal class DeviceSelectException(string message) : Exception(message) { }
