@@ -1,23 +1,42 @@
 # Default, select no device
 PUT {{SwitcherPi.Api_HostAddress}}/api/Devices?id=0
-Accept: application/json
 
 ###
 
 # Select device 1
 PUT {{SwitcherPi.Api_HostAddress}}/api/Devices?id=1
-Accept: application/json
 
 ###
 
 # Select device 2
 PUT {{SwitcherPi.Api_HostAddress}}/api/Devices?id=2
-Accept: application/json
 
 ###
 
 # Select device 3
 PUT {{SwitcherPi.Api_HostAddress}}/api/Devices?id=3
-Accept: application/json
 
 ###
+
+# Get device 1 state
+GET {{SwitcherPi.Api_HostAddress}}/api/Devices/1
+
+###
+
+# Set device 1 to selected
+POST {{SwitcherPi.Api_HostAddress}}/api/Devices/1
+Content-Type: application/json
+
+{
+  "isSelected": true
+}
+
+###
+
+# Set device 1 to not selected
+POST {{SwitcherPi.Api_HostAddress}}/api/Devices/1
+Content-Type: application/json
+
+{
+  "isSelected": false
+}
