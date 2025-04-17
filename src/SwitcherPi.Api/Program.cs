@@ -22,19 +22,22 @@ devicesGroup.MapPut("/", static async (int id, DeviceSelectorService service) =>
     return TypedResults.NoContent();
 });
 
-devicesGroup.MapGet("/{id:int}", static (int id, DeviceSelectorService service) =>
+devicesGroup.MapGet("/{id:int}", static async (int id, DeviceSelectorService service) =>
 {
-    return TypedResults.Ok(new DeviceStateResponse(id, service.SelectedDeviceId == id));
+    var selectedDeviceId = await service.GetSelectedDeviceIdAsync();
+    return TypedResults.Ok(new DeviceStateResponse(id, selectedDeviceId == id));
 });
 
 devicesGroup.MapPost("/{id:int}", static async (int id, DeviceStateRequest state, DeviceSelectorService service) =>
 {
-    if (state.IsSelected && service.SelectedDeviceId != id)
+    var selectedDeviceId = await service.GetSelectedDeviceIdAsync();
+    if (state.IsSelected && selectedDeviceId != id)
         await service.SelectDeviceAsync(id);
-    else if (!state.IsSelected && service.SelectedDeviceId == id)
+    else if (!state.IsSelected && selectedDeviceId == id)
         await service.SelectDeviceAsync(0);
 
-    return TypedResults.Ok(new DeviceStateResponse(id, service.SelectedDeviceId == id));
+    selectedDeviceId = await service.GetSelectedDeviceIdAsync();
+    return TypedResults.Ok(new DeviceStateResponse(id, selectedDeviceId == id));
 });
 
 app.Run();
