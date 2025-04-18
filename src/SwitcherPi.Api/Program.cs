@@ -40,4 +40,6 @@ devicesGroup.MapPost("/{id:int}", static async (int id, DeviceStateRequest state
     return TypedResults.Ok(new DeviceStateResponse(id, selectedDeviceId == id));
 });
 
+await app.Services.GetRequiredService<DeviceSelectorService>().SynchronizeAsync();
+
 app.Run();

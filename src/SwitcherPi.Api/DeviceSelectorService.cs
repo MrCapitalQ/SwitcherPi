@@ -61,6 +61,8 @@ internal class DeviceSelectorService(IOptions<DeviceScanCodeOptions> options, IL
             }
         }
     }
+
+    public async Task SynchronizeAsync() => await SelectDeviceAsync(await GetSelectedDeviceIdAsync());
 }
 
 internal class DeviceSelectException(string message) : Exception(message) { }
