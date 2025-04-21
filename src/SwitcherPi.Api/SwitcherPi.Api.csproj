@@ -12,7 +12,12 @@
     <PublishTrimmed>true</PublishTrimmed>
     <PublishSingleFile>true</PublishSingleFile>
     <EnableConfigurationBindingGenerator>true</EnableConfigurationBindingGenerator>
+    <ILLinkTreatWarningsAsErrors>false</ILLinkTreatWarningsAsErrors>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ToMqttNet" Version="5.0.0" />
+  </ItemGroup>
 
   <ItemGroup>
     <Content Update="http-client.env.json">

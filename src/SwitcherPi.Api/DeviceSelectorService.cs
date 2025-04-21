@@ -5,6 +5,8 @@ namespace MrCapitalQ.SwitcherPi.Api;
 
 internal class DeviceSelectorService(IOptions<DeviceScanCodeOptions> options, ILogger<DeviceSelectorService> logger)
 {
+    public event EventHandler? SelectedDeviceChanged;
+
     private readonly string _filePath = Path.Combine(AppContext.BaseDirectory, "data.txt");
     private readonly DeviceScanCodeOptions _options = options.Value;
     private readonly ILogger<DeviceSelectorService> _logger = logger;
@@ -60,6 +62,8 @@ internal class DeviceSelectorService(IOptions<DeviceScanCodeOptions> options, IL
                     throw new DeviceSelectException(error);
             }
         }
+
+        SelectedDeviceChanged?.Invoke(this, EventArgs.Empty);
     }
 
     public async Task SynchronizeAsync() => await SelectDeviceAsync(await GetSelectedDeviceIdAsync());

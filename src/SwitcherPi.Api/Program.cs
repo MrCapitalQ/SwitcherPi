@@ -1,4 +1,5 @@
 using MrCapitalQ.SwitcherPi.Api;
+using ToMqttNet;
 
 var builder = WebApplication.CreateSlimBuilder(args);
 
@@ -8,7 +9,11 @@ builder.Services.ConfigureHttpJsonOptions(o =>
 });
 
 // Add services to the container.
-builder.Services.AddTransient<DeviceSelectorService>();
+builder.Services.AddMqttConnection()
+    .Bind(builder.Configuration.GetSection(MqttConnectionOptions.Section));
+builder.Services.AddHostedService<MqttBackgroundService>();
+
+builder.Services.AddSingleton<DeviceSelectorService>();
 builder.Services.AddOptions<DeviceScanCodeOptions>()
     .Bind(builder.Configuration.GetSection("DeviceScanCodes"));
 
@@ -20,6 +25,12 @@ devicesGroup.MapPut("/", static async (int id, DeviceSelectorService service) =>
 {
     await service.SelectDeviceAsync(id);
     return TypedResults.NoContent();
+});
+
+devicesGroup.MapGet("/", static async (DeviceSelectorService service) =>
+{
+    var selectedDeviceId = await service.GetSelectedDeviceIdAsync();
+    return TypedResults.Ok(new DevicesStateResponse(selectedDeviceId));
 });
 
 devicesGroup.MapGet("/{id:int}", static async (int id, DeviceSelectorService service) =>

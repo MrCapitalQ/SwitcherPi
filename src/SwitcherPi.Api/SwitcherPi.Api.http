@@ -18,6 +18,11 @@ PUT {{SwitcherPi.Api_HostAddress}}/api/Devices?id=3
 
 ###
 
+# Get devices state
+GET {{SwitcherPi.Api_HostAddress}}/api/Devices
+
+###
+
 # Get device 1 state
 GET {{SwitcherPi.Api_HostAddress}}/api/Devices/1
 
