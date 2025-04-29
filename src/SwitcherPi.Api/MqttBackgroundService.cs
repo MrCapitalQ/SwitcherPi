@@ -13,12 +13,15 @@ internal class MqttBackgroundService : BackgroundService
     private readonly string _setSelectedDeviceTopic;
     private readonly MqttConnectionService _mqtt;
     private readonly DeviceSelectorService _service;
+    private readonly ILogger<MqttBackgroundService> _logger;
 
-    public MqttBackgroundService(MqttConnectionService mqtt, DeviceSelectorService service)
+    public MqttBackgroundService(MqttConnectionService mqtt,
+        DeviceSelectorService service,
+        ILogger<MqttBackgroundService> logger)
     {
         _mqtt = mqtt;
         _service = service;
-
+        _logger = logger;
         _stateTopic = $"{_mqtt.MqttOptions.NodeId}/state";
         _setSelectedDeviceTopic = $"{_mqtt.MqttOptions.NodeId}/command/set_selected_device";
         _mqtt.OnConnectAsync += Mqtt_OnConnectAsync;
@@ -62,7 +65,8 @@ internal class MqttBackgroundService : BackgroundService
                 DeviceSelectOptions.Device1,
                 DeviceSelectOptions.Device2,
                 DeviceSelectOptions.Device3
-            ]
+            ],
+            Retain = true
         });
 
         // Wait indefinitely until the service is stopped so it's not cleaned up.
@@ -71,6 +75,8 @@ internal class MqttBackgroundService : BackgroundService
 
     private async Task PublishStateUpdateAsync()
     {
+        _logger.LogInformation("Publishing current state to MQTT broker.");
+
         var selectedDeviceId = await _service.GetSelectedDeviceIdAsync();
         var payload = JsonSerializer.Serialize(new DevicesStateResponse(selectedDeviceId),
             AppJsonSerializerContext.Default.DevicesStateResponse);
@@ -82,10 +88,16 @@ internal class MqttBackgroundService : BackgroundService
             .Build());
     }
 
-    private async Task Mqtt_OnConnectAsync(MqttClientConnectedEventArgs arg) => await PublishStateUpdateAsync();
+    private async Task Mqtt_OnConnectAsync(MqttClientConnectedEventArgs arg)
+    {
+        _logger.LogInformation("MQTT client connected to broker.");
+        await PublishStateUpdateAsync();
+    }
 
     private async Task Mqtt_OnApplicationMessageReceivedAsync(MqttApplicationMessageReceivedEventArgs arg)
     {
+        _logger.LogInformation("Received MQTT message with topic {MqttTopic}", arg.ApplicationMessage.Topic);
+
         if (arg.ApplicationMessage.Topic != _setSelectedDeviceTopic)
             return;
 
